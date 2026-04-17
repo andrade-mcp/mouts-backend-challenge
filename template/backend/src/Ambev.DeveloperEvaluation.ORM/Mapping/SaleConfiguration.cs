@@ -26,11 +26,13 @@ public class SaleConfiguration : IEntityTypeConfiguration<Sale>
         builder.Property(s => s.CreatedAt).IsRequired();
         builder.Property(s => s.UpdatedAt);
 
-        // xmin is Postgres' system row-version column; EF uses it for optimistic
-        // concurrency without needing an application-managed timestamp column.
-        builder.Property(s => s.RowVersion)
-            .HasColumnName("xmin").HasColumnType("xid")
-            .ValueGeneratedOnAddOrUpdate().IsConcurrencyToken();
+        // keeps the domain free of ORM details 
+    
+        builder.Property<uint>("xmin")
+            .HasColumnName("xmin")
+            .HasColumnType("xid")
+            .ValueGeneratedOnAddOrUpdate()
+            .IsConcurrencyToken();
 
         builder.HasIndex(s => s.SaleNumber).IsUnique();
         builder.HasIndex(s => s.CustomerId);

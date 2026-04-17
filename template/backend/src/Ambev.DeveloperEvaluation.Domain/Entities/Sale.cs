@@ -22,9 +22,6 @@ public class Sale : BaseEntity
     public DateTime CreatedAt { get; private set; }
     public DateTime? UpdatedAt { get; private set; }
 
-    /// <summary>Optimistic concurrency token; mismatch surfaces as <c>DbUpdateConcurrencyException</c>.</summary>
-    public byte[] RowVersion { get; set; } = Array.Empty<byte>();
-
     public IReadOnlyCollection<SaleItem> Items => _items.AsReadOnly();
     public IReadOnlyCollection<DomainEvent> DomainEvents => _domainEvents.AsReadOnly();
 
