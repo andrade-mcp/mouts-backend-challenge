@@ -26,6 +26,7 @@ public class SaleItem : BaseEntity
 
     public SaleItem(Guid productId, string productName, int quantity, decimal unitPrice)
     {
+        Id = Guid.NewGuid();
         ProductId = productId;
         ProductName = productName;
         SetQuantityAndPrice(quantity, unitPrice);
