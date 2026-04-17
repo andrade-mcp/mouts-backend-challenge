@@ -30,6 +30,7 @@ public class Sale : BaseEntity
 
     public Sale()
     {
+        Id = Guid.NewGuid();
         CreatedAt = DateTime.UtcNow;
     }
 
