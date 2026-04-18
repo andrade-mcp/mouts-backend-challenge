@@ -41,7 +41,7 @@ public class Program
                     Scheme = "bearer",
                     BearerFormat = "JWT",
                     In = ParameterLocation.Header,
-                    Description = "Paste the JWT returned by POST /api/auth. Format: Bearer {token}"
+                    Description = "Paste  WT returned by POST /api/auth (no 'Bearer' prefix)."
                 });
 
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement
