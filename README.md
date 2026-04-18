@@ -1,16 +1,13 @@
-# Developer Evaluation - Sales API
+# Sales API 
 
-> This is my submission for the AB InBev .NET test - Sales API 
- DDD, CQRS, and the discount tiers from the challenge brief.
+> Implements the complete Sales CRUD feature on top of the `coodesh/mouts-backend-challenge` template, mirroring the existing Users/Auth architecture (Clean Architecture + DDD + CQRS/MediatR + EF Core + Postgres).
 
-Submission for the Coodesh / Mouts / AB InBev .NET challenge. Adds a complete
-**Sales** feature to the provided template, mirroring the existing `Users` /
+ Adds a complete **Sales** feature to the provided template, mirroring the existing `Users` /
 `Auth` architecture (Clean Architecture + DDD + CQRS/MediatR + EF Core +
 Postgres).
 
 - **Fork:** https://github.com/andrade-mcp/mouts-backend-challenge
 - **Branch:** `feat/sales-api`
-- **Original brief:** see the collapsed section at the bottom.
 
 ---
 
@@ -21,8 +18,7 @@ Prereqs: Docker Desktop (or any local Postgres 13+), .NET 8 SDK.
 ```bash
 cd template/backend
 
-# 1. Bring up Postgres (docker-compose also boots the API container, but you
-#    can also run the WebApi directly with `dotnet run` and connect to the db).
+# 1. Bring up Postgres using docker-compose
 docker-compose up -d
 
 # 2. Apply migrations (creates Users + Sales + SaleItems)
@@ -44,7 +40,7 @@ All `/api/sales` endpoints are gated with `[Authorize]`. Flow:
 # Create a user
 curl -X POST http://localhost:8080/api/users -H 'content-type: application/json' -d '{
   "username": "admin", "email": "admin@ambev.local",
-  "password": "Test@123", "phone": "+5511999998888",
+  "password": "Test@123", "phone": "+5511999999999",
   "status": 1, "role": 3
 }'
 
@@ -54,7 +50,7 @@ curl -X POST http://localhost:8080/api/auth -H 'content-type: application/json' 
 }'
 ```
 
-Paste the token into Swagger's **Authorize** button (`Bearer <token>`).
+Paste the token into Swagger's **Authorize** button (`<token>`).
 
 ---
 
@@ -96,8 +92,8 @@ Rio de Janeiro - Copacabana branch from April onwards, ordered by
 ```
 
 Expected computed output on the line items:
-- Item 1 (qty 3)  -> discount 0%,  total R$ 13.50
-- Item 2 (qty 12) -> discount 20%, total R$ 95.04
+- Item 1 (quantity 3)  -> discount 0%,  total R$ 13.50
+- Item 2 (quantity 12) -> discount 20%, total R$ 95.04
 - Sale total: R$ 108.54
 
 ### Status codes
@@ -167,19 +163,6 @@ validators share one ceiling.
   everything else → 500 with the error logged server-side. The existing
   `ValidationExceptionMiddleware` keeps its dedicated 400 handler.
 
-### Template fixes made along the way
-
-Called out in the commit log:
-
-- `fix(ORM): point correct migrations project` - design-time
-  `DbContextFactory` said `WebApi`, `Program.cs` said `ORM`; scaffolder
-  refused to run until aligned.
-- `fix(ORM): migration` (xmin shadow token) - Npgsql can't map `byte[]` to
-  `xid`; moved the concurrency token to a shadow property.
-- `fix(domain): assign Id at construction for Sale and SaleItem` - caught
-  by a unit test where `CancelItem(id)` matched the wrong line because
-  both items had `Guid.Empty`.
-
 ---
 
 ## Tests
@@ -200,14 +183,9 @@ dotnet test Ambev.DeveloperEvaluation.sln
   unknown id → 404, duplicate SaleNumber → 409.
 - **49 pre-existing** - the template's User / Auth tests, still green.
 
-> Real-Postgres integration coverage (xmin concurrency, decimal precision,
-> index usage) is left for the `Integration` project once a test DB
-> (Testcontainers or local Postgres) is wired up - explicitly out of scope
-> for this submission's time-box.
-
 ---
 
-## Project structure (Sales-related only)
+## Project structure (Sales only)
 
 ```
 src/
@@ -241,73 +219,14 @@ tests/
 
 ---
 
-## Commit history
-
-The branch is 23 commits; each one builds cleanly, and the log reads as an
-iterative narrative (Domain -> tests -> ORM -> Application -> WebApi -> Functional
-tests -> README) with three fix commits inserted where tests or tooling caught
-real issues:
-
-```
-git log --oneline main..feat/sales-api
-```
-
 ---
 
-<details>
-<summary>Original challenge statement (unchanged)</summary>
+## Author
 
-`READ CAREFULLY`
-
-## Use Case
-**You are a developer on the DeveloperStore team. Now we need to implement the API prototypes.**
-
-As we work with `DDD`, to reference entities from other domains, we use the `External Identities` pattern with denormalization of entity descriptions.
-
-Therefore, you will write an API (complete CRUD) that handles sales records. The API needs to be able to inform:
-
-* Sale number
-* Date when the sale was made
-* Customer
-* Total sale amount
-* Branch where the sale was made
-* Products
-* Quantities
-* Unit prices
-* Discounts
-* Total amount for each item
-* Cancelled/Not Cancelled
-
-It's not mandatory, but it would be a differential to build code for publishing events of:
-* SaleCreated
-* SaleModified
-* SaleCancelled
-* ItemCancelled
-
-If you write the code, **it's not required** to actually publish to any Message Broker. You can log a message in the application log or however you find most convenient.
-
-### Business Rules
-
-* Purchases above 4 identical items have a 10% discount
-* Purchases between 10 and 20 identical items have a 20% discount
-* It's not possible to sell above 20 identical items
-* Purchases below 4 items cannot have a discount
-
-## Template documentation
-
-- [Overview](/.doc/overview.md)
-- [Tech Stack](/.doc/tech-stack.md)
-- [Frameworks](/.doc/frameworks.md)
-- [Project Structure](/.doc/project-structure.md)
-
-</details>
-
----
-
-## Sobre o autor
-
-Submitted by **Sergio Andrade** - Senior Full Stack Developer (.NET + React),
-based in São Paulo. Candidate for the AB InBev position via Mouts TI.
+**Sergio Andrade** - Senior Full Stack Developer
+[andrade.mcp@gmail.com](mailto:[EMAIL_ADDRESS])
+[EMAIL_ADDRESS]
+11 99243-0000
 
 - GitHub: [@andrade-mcp](https://github.com/andrade-mcp)
 - Submission date: 17 abr 2026
