@@ -30,16 +30,17 @@ public static class LoggingExtension
     /// </summary>
     static readonly Func<LogEvent, bool> _filterPredicate = exclusionPredicate =>
     {
-
-        if (exclusionPredicate.Level != LogEventLevel.Information) return true;
+        // Never filter warnings/errors — they're diagnostic gold.
+        if (exclusionPredicate.Level != LogEventLevel.Information) return false;
 
         exclusionPredicate.Properties.TryGetValue("StatusCode", out var statusCode);
         exclusionPredicate.Properties.TryGetValue("Path", out var path);
 
-        var excludeByStatusCode = statusCode == null || statusCode.ToString().Equals("200");
-        var excludeByPath = path?.ToString().Contains("/health") ?? false;
+        var is200 = statusCode != null && statusCode.ToString().Equals("200");
+        var isHealth = path?.ToString().Contains("/health") ?? false;
 
-        return excludeByStatusCode && excludeByPath;
+        // Only hide the noisy 200s on /health.
+        return is200 && isHealth;
     };
 
     /// <summary>
