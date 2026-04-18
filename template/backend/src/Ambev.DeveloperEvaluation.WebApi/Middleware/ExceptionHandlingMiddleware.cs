@@ -38,6 +38,10 @@ public class ExceptionHandlingMiddleware
         {
             await Write(context, HttpStatusCode.NotFound, ex.Message);
         }
+        catch (UnauthorizedAccessException ex)
+        {
+            await Write(context, HttpStatusCode.Unauthorized, ex.Message);
+        }
         catch (DomainException ex)
         {
             await Write(context, HttpStatusCode.Conflict, ex.Message);
