@@ -42,9 +42,9 @@ public class SalesEndpointsTests : IClassFixture<SalesApiFactory>
             saleNumber = "S-CAP-01",
             saleDate = DateTime.UtcNow,
             customerId = Guid.NewGuid(),
-            customerName = "Acme",
+            customerName = "Distribuidora de Bebidas Sergio Andrade",
             branchId = Guid.NewGuid(),
-            branchName = "SP",
+            branchName = "São Paulo - Centro",
             items = new[]
             {
                 new { productId = Guid.NewGuid(), productName = "Beer", quantity = 21, unitPrice = 1.0m }
@@ -69,9 +69,9 @@ public class SalesEndpointsTests : IClassFixture<SalesApiFactory>
             saleNumber = "S-OK-01",
             saleDate = DateTime.UtcNow,
             customerId = Guid.NewGuid(),
-            customerName = "Acme",
+            customerName = "Distribuidora de Bebidas Sergio Andrade",
             branchId = Guid.NewGuid(),
-            branchName = "SP",
+            branchName = "São Paulo - Centro",
             items = new[]
             {
                 new { productId = Guid.NewGuid(), productName = "Beer", quantity = 12, unitPrice = 9.90m }
@@ -103,9 +103,9 @@ public class SalesEndpointsTests : IClassFixture<SalesApiFactory>
             SaleNumber = "S-DUP-01",
             SaleDate = DateTime.UtcNow,
             CustomerId = Guid.NewGuid(),
-            CustomerName = "Acme",
+            CustomerName = "Distribuidora de Bebidas Sergio Andrade",
             BranchId = Guid.NewGuid(),
-            BranchName = "SP"
+            BranchName = "São Paulo - Centro"
         };
         existing.AddItem(Guid.NewGuid(), "x", 1, 1m);
         _factory.Repository.GetBySaleNumberAsync("S-DUP-01", Arg.Any<CancellationToken>())
@@ -116,9 +116,9 @@ public class SalesEndpointsTests : IClassFixture<SalesApiFactory>
             saleNumber = "S-DUP-01",
             saleDate = DateTime.UtcNow,
             customerId = Guid.NewGuid(),
-            customerName = "Acme",
+            customerName = "Distribuidora de Bebidas Sergio Andrade",
             branchId = Guid.NewGuid(),
-            branchName = "SP",
+            branchName = "São Paulo - Centro",
             items = new[]
             {
                 new { productId = Guid.NewGuid(), productName = "Beer", quantity = 5, unitPrice = 10m }
